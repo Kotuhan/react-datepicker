@@ -1,11 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { findDOMNode } from 'react-dom';
-import Component from 'react-class';
 import assign from 'object-assign';
-
 import cx from 'classnames';
-
 import moment from 'moment';
 import DateFormatInput from '../DateFormatInput';
 import join from '../join';
@@ -58,7 +54,7 @@ export default class DateField extends Component {
         </div>);
     }
 
-    renderInput() {
+    renderInput = () => {
         const props = this.props;
         const inputProps = this.prepareInputProps(this.props);
 
@@ -86,7 +82,7 @@ export default class DateField extends Component {
         return input;
     }
 
-    renderClearIcon() {
+    renderClearIcon = () => {
         const props = this.props;
 
         if (!props.clearIcon || props.forceValidDate || props.disabled) {
@@ -120,7 +116,7 @@ export default class DateField extends Component {
         return result;
     }
 
-    onClearMouseDown(event) {
+    onClearMouseDown = (event) => {
         event.preventDefault();
         this.onFieldChange('');
 
@@ -129,8 +125,9 @@ export default class DateField extends Component {
         }
     }
 
-    renderCalendarIcon() {
+    renderCalendarIcon = () => {
         const { focused } = this.state;
+
         let result;
         const renderIcon = this.props.renderCalendarIcon;
 
@@ -150,7 +147,7 @@ export default class DateField extends Component {
         return result;
     }
 
-    onCalendarIconMouseDown(event) {
+    onCalendarIconMouseDown = (event) => {
         if (this.props.disabled) {
             return;
         }
@@ -163,13 +160,13 @@ export default class DateField extends Component {
         this.toggleExpand();
     }
 
-    prepareExpanded(props) {
+    prepareExpanded = (props) => {
         return props.expanded === undefined ?
             this.state.expanded :
             props.expanded;
     }
 
-    prepareDate(props, pickerProps) {
+    prepareDate = (props, pickerProps) => {
         props = props || this.props;
         pickerProps = pickerProps || props.pickerProps;
 
@@ -207,7 +204,7 @@ export default class DateField extends Component {
         };
     }
 
-    preparePickerProps(props) {
+    preparePickerProps = (props) => {
         const picker = getPicker(props, this);
 
         if (!picker) {
@@ -217,7 +214,7 @@ export default class DateField extends Component {
         return picker.props || {};
     }
 
-    prepareProps(thisProps) {
+    prepareProps = (thisProps) => {
         const props = this.props = assign({}, thisProps);
 
         props.children = React.Children.toArray(props.children);
@@ -255,7 +252,7 @@ export default class DateField extends Component {
         return props;
     }
 
-    prepareClassName(props) {
+    prepareClassName = (props) => {
         const position = POSITIONS[props.pickerProps.position || props.pickerPosition] || 'bottom';
 
         return join([
@@ -281,10 +278,9 @@ export default class DateField extends Component {
         ]);
     }
 
-    prepareInputProps(props) {
+    prepareInputProps = (props) => {
         const input = <input />;
         const inputProps = (input && input.props) || {};
-
         const onBlur = joinFunctions(inputProps.onBlur, this.onFieldBlur);
         const onFocus = joinFunctions(inputProps.onFocus, this.onFieldFocus);
         const onChange = joinFunctions(inputProps.onChange, this.onFieldChange);
@@ -322,7 +318,7 @@ export default class DateField extends Component {
         return newInputProps;
     }
 
-    renderPicker() {
+    renderPicker = () => {
         const props = this.props;
 
         if (this.isExpanded()) {
@@ -409,7 +405,7 @@ export default class DateField extends Component {
         return null;
     }
 
-    onTimeChange(value, timeFormat) {
+    onTimeChange = (value, timeFormat) => {
         const timeMoment = this.toMoment(value, { dateFormat: timeFormat });
 
         const time = ['hour', 'minute', 'second', 'millisecond'].reduce((acc, part) => {
@@ -420,18 +416,18 @@ export default class DateField extends Component {
         this.time = time;
     }
 
-    getTime() {
+    getTime = () => {
         return this.time;
     }
 
-    setValue(value, config = {}) {
+    setValue = (value, config = {}) => {
         const dateMoment = this.toMoment(value);
         const dateString = this.format(dateMoment);
 
         this.setDate(dateString, assign(config, { dateMoment }));
     }
 
-    onFooterOkClick() {
+    onFooterOkClick = () => {
         const activeDate = this.p.activeDate;
 
         if (activeDate) {
@@ -445,11 +441,11 @@ export default class DateField extends Component {
         this.setExpanded(false);
     }
 
-    onFooterCancelClick() {
+    onFooterCancelClick = () => {
         this.setExpanded(false);
     }
 
-    onFooterTodayClick() {
+    onFooterTodayClick = () => {
         const today = this.toMoment(new Date())
             .startOf('day');
 
@@ -460,7 +456,7 @@ export default class DateField extends Component {
         return false;
     }
 
-    onFooterClearClick() {
+    onFooterClearClick = () => {
         const clearDate = this.props.clearDate === undefined ? this.props.minDate : this.props.clearDate;
 
         if (clearDate !== undefined) {
@@ -474,7 +470,7 @@ export default class DateField extends Component {
         return false;
     }
 
-    toMoment(value, props) {
+    toMoment = (value, props) => {
         if (moment.isMoment(value)) {
             return value;
         }
@@ -498,7 +494,7 @@ export default class DateField extends Component {
         return date;
     }
 
-    isValid(text) {
+    isValid = (text) => {
         if (text === undefined) {
             text = this.props.text;
         }
@@ -506,19 +502,19 @@ export default class DateField extends Component {
         return this.toMoment(text).isValid();
     }
 
-    onViewDateChange(viewDate) {
+    onViewDateChange = (viewDate) => {
         this.setState({
             viewDate
         });
     }
 
-    onActiveDateChange(activeDate) {
+    onActiveDateChange = (activeDate) => {
         this.setState({
             activeDate
         });
     }
 
-    onViewKeyDown(event) {
+    onViewKeyDown = (event) => {
         // const key = event.key;
 
         if (this.pickerView) { // } && (key == 'Escape' || key == 'Enter' || (key in NAV_KEYS))) {
@@ -526,7 +522,7 @@ export default class DateField extends Component {
         }
     }
 
-    onPickerMouseDown(event) {
+    onPickerMouseDown = (event) => {
         preventDefault(event);
 
         if (!this.isFocused()) {
@@ -534,7 +530,7 @@ export default class DateField extends Component {
         }
     }
 
-    isHistoryViewVisible() {
+    isHistoryViewVisible = () => {
         if (this.picker && this.picker.isHistoryViewVisible) {
             return this.picker.isHistoryViewVisible();
         }
@@ -542,7 +538,7 @@ export default class DateField extends Component {
         return false;
     }
 
-    onFieldKeyDown(event) {
+    onFieldKeyDown = (event) => {
         const key = event.key;
         const expanded = this.isExpanded();
         const historyVisible = this.isHistoryViewVisible();
@@ -580,19 +576,15 @@ export default class DateField extends Component {
         return true;
     }
 
-    getInput() {
-        return findDOMNode(this.field);
-    }
-
-    isFocused() {
+    isFocused = () => {
         return this.state.focused;
     }
 
-    isLazyFocused() {
+    isLazyFocused = () => {
         return this.isFocused() || this.isTimeInputFocused();
     }
 
-    isTimeInputFocused() {
+    isTimeInputFocused = () => {
         if (this.pickerView && this.pickerView.isTimeInputFocused) {
             return this.pickerView.isTimeInputFocused();
         }
@@ -600,7 +592,7 @@ export default class DateField extends Component {
         return false;
     }
 
-    onFieldFocus(event) {
+    onFieldFocus = (event) => {
         if (this.state.focused) {
             return;
         }
@@ -615,7 +607,7 @@ export default class DateField extends Component {
         this.props.onFocus(event);
     }
 
-    onFieldBlur(event) {
+    onFieldBlur = (event) => {
         if (!this.isFocused()) {
             return;
         }
@@ -634,7 +626,7 @@ export default class DateField extends Component {
         setTimeout(() => this.onLazyBlur(), 0);
     }
 
-    onClockEnterKey() {
+    onClockEnterKey = () => {
         if (!this.isFocused()) {
             this.focus();
         }
@@ -642,7 +634,7 @@ export default class DateField extends Component {
         this.onFooterOkClick();
     }
 
-    onClockEscapeKey() {
+    onClockEscapeKey = () => {
         if (!this.isFocused()) {
             this.focus();
         }
@@ -650,7 +642,7 @@ export default class DateField extends Component {
         this.onFooterCancelClick();
     }
 
-    onClockInputBlur() {
+    onClockInputBlur = () => {
         setTimeout(() => {
             if (!this.isFocused()) {
                 this.onLazyBlur();
@@ -658,7 +650,7 @@ export default class DateField extends Component {
         }, 0);
     }
 
-    onLazyBlur() {
+    onLazyBlur = () => {
         if (this.unmounted) {
             return;
         }
@@ -680,19 +672,19 @@ export default class DateField extends Component {
         }
     }
 
-    onInputChange() {
+    onInputChange = () => {
 
     }
 
-    isExpanded() {
+    isExpanded = () => {
         return this.props.expanded;
     }
 
-    toggleExpand() {
+    toggleExpand = () => {
         this.setExpanded(!this.props.expanded);
     }
 
-    setExpanded(bool) {
+    setExpanded = (bool) => {
         const props = this.props;
 
         if (bool === props.expanded) {
@@ -723,15 +715,15 @@ export default class DateField extends Component {
         this.props.onExpandChange(bool);
     }
 
-    onCollapse() {
+    onCollapse = () => {
         this.props.onCollapse();
     }
 
-    onExpand() {
+    onExpand = () => {
         this.props.onExpand();
     }
 
-    onFieldChange(value) {
+    onFieldChange = (value) => {
         if (this.props.rawInput && typeof value !== 'string') {
             const event = value;
             value = event.target.value;
@@ -748,7 +740,7 @@ export default class DateField extends Component {
         this.onTextChange(value);
     }
 
-    onTextChange(text) {
+    onTextChange = (text) => {
         if (this.props.text === undefined && this.props.value === undefined) {
             this.setState({
                 text
@@ -760,7 +752,7 @@ export default class DateField extends Component {
         }
     }
 
-    onPickerChange(dateString, { dateMoment, forceUpdate }, event) {
+    onPickerChange = (dateString, { dateMoment, forceUpdate }, event) => {
         const isEnter = event && event.key === 'Enter';
         const updateOnDateClick = forceUpdate ? true : this.props.updateOnDateClick || isEnter;
 
@@ -775,7 +767,7 @@ export default class DateField extends Component {
         }
     }
 
-    setDate(dateString, { dateMoment, skipTime = false }) {
+    setDate = (dateString, { dateMoment, skipTime = false }) => {
         const props = this.props;
 
         const currentDate = props.date;
@@ -797,7 +789,7 @@ export default class DateField extends Component {
         this.onChange(dateMoment);
     }
 
-    onChange(dateMoment) {
+    onChange = (dateMoment) => {
         if (dateMoment != null && !moment.isMoment(dateMoment)) {
             dateMoment = this.toMoment(dateMoment);
         }
@@ -826,21 +818,20 @@ export default class DateField extends Component {
         this.setState(newState);
     }
 
-    format(mom, format) {
+    format = (mom, format) => {
         return mom == null ?
             '' :
             mom.format(format || this.props.displayFormat || this.props.dateFormat);
     }
 
-    focusField() {
-        const input = findDOMNode(this.field);
-
+    focusField = () => {
+        const input = this.field;
         if (input) {
             input.focus();
         }
     }
 
-    focus() {
+    focus = () => {
         this.focusField();
     }
 }

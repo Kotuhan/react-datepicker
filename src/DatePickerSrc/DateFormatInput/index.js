@@ -1,7 +1,5 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { findDOMNode } from 'react-dom';
-import Component from 'react-class';
 import throttle from 'lodash.throttle';
 
 import { getSelectionStart, getSelectionEnd, setCaretPosition } from '../TimeInput';
@@ -43,7 +41,7 @@ export default class DateFormatInput extends Component {
         };
     }
 
-    getMinMax(props) {
+    getMinMax = (props) => {
         props = props || this.props;
 
         let minDate = null;
@@ -77,7 +75,7 @@ export default class DateFormatInput extends Component {
         }
     }
 
-    toMoment(value, props) {
+    toMoment = (value, props) => {
         props = props || this.props;
 
         return toMoment(value, {
@@ -95,6 +93,7 @@ export default class DateFormatInput extends Component {
         const displayValue = this.displayValue = this.toMoment(value).format(props.dateFormat);
 
         return (<input
+            ref={el => this.inputRef = el} //eslint-disable-line
             className={props.className}
             defaultValue={undefined}
             onFocus={this.onFocus}
@@ -106,11 +105,11 @@ export default class DateFormatInput extends Component {
         />);
     }
 
-    focus() {
-        findDOMNode(this).focus();
+    focus = () => {
+        this.inputRef.focus();
     }
 
-    onFocus(event) {
+    onFocus = (event) => {
         if (this.props.onFocus) {
             this.props.onFocus(event);
         }
@@ -120,7 +119,7 @@ export default class DateFormatInput extends Component {
         });
     }
 
-    onBlur(event) {
+    onBlur = (event) => {
         if (this.props.onBlur) {
             this.props.onBlur(event);
         }
@@ -130,15 +129,15 @@ export default class DateFormatInput extends Component {
         });
     }
 
-    isFocused() {
+    isFocused = () => {
         return this.state.focused;
     }
 
-    onChange(event) {
+    onChange = (event) => {
         event.stopPropagation();
     }
 
-    onDirection(dir, event = {}) {
+    onDirection = (dir, event = {}) => {
         this.onKeyDown({
             key: dir > 0 ? 'ArrowUp' : 'ArrowDown',
             type: event.type || 'unknown',
@@ -147,7 +146,7 @@ export default class DateFormatInput extends Component {
         });
     }
 
-    onWheel(event) {
+    onWheel = (event) => {
         if (this.props.updateOnWheel && this.isFocused()) {
             this.onDirection(-event.deltaY, event);
             // this.onKeyDown({
@@ -163,7 +162,7 @@ export default class DateFormatInput extends Component {
         }
     }
 
-    onKeyDown(event) {
+    onKeyDown = (event) => {
         const { props } = this;
 
         let { key, type, which } = event;
@@ -277,22 +276,22 @@ export default class DateFormatInput extends Component {
         }
     }
 
-    getInput() {
-        return findDOMNode(this);
+    getInput = () => {
+        return this.inputRef;
     }
 
-    setCaretPosition(pos) {
+    setCaretPosition = (pos) => {
         const dom = this.getInput();
         if (dom) {
             setCaretPosition(dom, pos);
         }
     }
 
-    format(mom, format) {
+    format = (mom, format) => {
         return mom.format(format || this.props.dateFormat);
     }
 
-    setStateValue(value, callback, { key, oldValue, currentPosition }) {
+    setStateValue = (value, callback, { key, oldValue, currentPosition }) => {
         let dateMoment = this.toMoment(value);
 
         if (!dateMoment.isValid()) {
@@ -356,7 +355,7 @@ export default class DateFormatInput extends Component {
         }
     }
 
-    setValue(value, dateMoment) {
+    setValue = (value, dateMoment) => {
         if (this.props.value === undefined) {
             this.setState({
                 value,
@@ -374,7 +373,7 @@ export default class DateFormatInput extends Component {
         }
     }
 
-    getSelectedRange() {
+    getSelectedRange = () => {
         const dom = this.getInput();
 
         return {
@@ -383,7 +382,7 @@ export default class DateFormatInput extends Component {
         };
     }
 
-    getSelectedValue(range) {
+    getSelectedValue = (range) => {
         range = range || this.getSelectedRange();
         const value = this.displayValue;
 

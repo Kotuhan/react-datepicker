@@ -23,6 +23,7 @@ export default class Calendar extends Component {
     }
 
     render() {
+        console.log('I"M USEDDDD');
         const props = this.p = assign({}, this.props);
         const dateFormat = props.dateFormat.toLowerCase();
 
